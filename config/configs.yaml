@@ -1,0 +1,47 @@
+checkpoint: null
+device:
+max_len: 200
+
+tokenizer:
+  tokenizer_file: null
+  vocab_path: 'files/vocab.txt'
+  
+data:
+  sampling_rate: 16000
+  n_mel_channels: 40
+  hop_length: 200
+  n_ftt: 400
+  training_file: 'files/train.csv'
+  testing_file: 'files/test.csv'
+  max_str_len: 57
+  descending_order: False
+  sep: '|'
+  csv_file_keys:
+    duration: 'duration'
+    path: 'wav_filename'
+    text: 'transcript'
+
+training:
+  batch_size: 16
+  optimizer: 'adam' # adam, sgd
+  learning_rate: 1e-3
+  epochs: 100
+  checkpoints_dir: 'checkpoints'
+  p_teacher_forcing: 0.1
+
+model:
+  encoder:
+    input_size: ${data.n_mel_channels} 
+    num_layers: 3
+    hidden_size: 128
+    truncate: false
+    reduction_factor: 2
+
+  decoder:
+    embedding_dim: 512
+    hidden_size: 256
+    n_layers: 2
+
+  attention:
+    hidden_size: ${model.decoder.hidden_size}
+    attention_size: 512
